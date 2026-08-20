@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArmourDoc — Zero-Knowledge Document Vault</title>
+<meta name="description" content="ArmourDoc is a zero-knowledge document vault with anti-snooping guard controls, biometric protection, secure PDF rendering and offline access.">
+<style>
+:root{
+  --bg:#050b16;--bg2:#081225;--card:#0b1830;--text:#f5f7ff;--muted:#aab6ca;
+  --blue:#1769ff;--blue2:#4b8dff;--purple:#8b5cf6;--line:rgba(255,255,255,.09);
+  --max:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;color:#111827;line-height:1.6}
+a{text-decoration:none;color:inherit}
+.container{width:min(var(--max),calc(100% - 40px));margin:auto}
+header{position:fixed;top:0;left:0;right:0;z-index:20;background:rgba(5,11,22,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.nav{height:76px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px;color:white;font-size:23px;font-weight:800;letter-spacing:-.5px}
+.shield{width:38px;height:44px;display:grid;place-items:center;clip-path:polygon(50% 0,92% 16%,86% 67%,50% 100%,14% 67%,8% 16%);background:linear-gradient(145deg,#6954ff,#1769ff);box-shadow:0 0 30px #1769ff66}
+.shield:after{content:"🔒";font-size:15px;filter:grayscale(1) brightness(8)}
+.navlinks{display:flex;gap:32px;color:#c7d0e2;font-size:14px}
+.navlinks a:hover{color:white}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:9px;font-weight:700;font-size:14px;border:1px solid transparent;transition:.2s}
+.btn-primary{background:linear-gradient(135deg,#1769ff,#0756e8);color:white;box-shadow:0 10px 30px #1769ff40}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 34px #1769ff55}
+.btn-outline{border-color:#6f7c91;color:white;background:rgba(255,255,255,.02)}
+.hero{min-height:690px;padding:140px 0 75px;background:
+radial-gradient(circle at 75% 42%,#273cff2b,transparent 25%),
+radial-gradient(circle at 53% 55%,#1769ff1c,transparent 27%),
+linear-gradient(180deg,#050b16,#071021);color:white;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;color:#8fb8ff;font-weight:700;font-size:13px;margin-bottom:18px}
+.eyebrow span{width:7px;height:7px;border-radius:50%;background:#4b8dff;box-shadow:0 0 14px #4b8dff}
+h1{font-size:clamp(45px,5.4vw,74px);line-height:1.03;letter-spacing:-3px;max-width:650px}
+.gradient{background:linear-gradient(90deg,#fff 10%,#4d90ff 65%,#b263ff);-webkit-background-clip:text;color:transparent}
+.hero p{color:#aebbd0;font-size:18px;max-width:600px;margin:25px 0 32px}
+.actions{display:flex;gap:14px;flex-wrap:wrap}
+.trust{display:flex;gap:27px;margin-top:38px;color:#c9d2e2;font-size:13px}
+.trust div{display:flex;align-items:center;gap:8px}.check{color:#62a0ff}
+.phone-wrap{position:relative;display:flex;justify-content:center}
+.phone{width:285px;height:555px;border:9px solid #172131;border-radius:40px;background:linear-gradient(180deg,#091529,#050a13);box-shadow:0 35px 90px #0008,0 0 70px #1769ff24;position:relative;padding:45px 16px 18px;color:white}
+.phone:before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);width:80px;height:20px;border-radius:15px;background:#05080e}
+.app-title{text-align:center;font-weight:800;font-size:18px;margin-bottom:18px}
+.vault{padding:17px;border-radius:14px;background:linear-gradient(135deg,#153b9a,#172354);border:1px solid #4268dc;margin-bottom:12px}
+.vault b{display:block}.vault small{color:#aebbe0}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{height:102px;border:1px solid #243754;border-radius:13px;background:#0c1a2f;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:12px;color:#e5eaf4}
+.icon{font-size:27px;margin-bottom:7px}.tile small{color:#8392a9}
+.phone-note{text-align:center;color:#71809a;font-size:11px;margin-top:25px}
+.glow{position:absolute;width:340px;height:340px;border-radius:50%;background:#1e55ff30;filter:blur(70px);z-index:-1}
+section{padding:90px 0}
+.section-head{text-align:center;max-width:700px;margin:0 auto 48px}
+.section-head h2{font-size:40px;letter-spacing:-1.5px;color:#0c1629}
+.section-head p{color:#69768b;margin-top:12px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.feature{padding:30px;border:1px solid #e4e9f1;border-radius:16px;background:white;box-shadow:0 10px 35px #0a1c3510}
+.feature-icon{width:50px;height:50px;border-radius:14px;background:#eef4ff;color:#1769ff;display:grid;place-items:center;font-size:24px;margin-bottom:19px}
+.feature h3{font-size:18px;margin-bottom:8px}.feature p{color:#66758b;font-size:14px}
+.about{background:#f7f9fc}.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.about h2{font-size:42px;line-height:1.1;letter-spacing:-1.5px;margin-bottom:18px}
+.about p{color:#66758b;margin-bottom:20px}
+.bullets{display:grid;gap:13px}.bullets div{display:flex;gap:10px;align-items:center;font-weight:600;font-size:14px}.tick{color:#1769ff}
+.safe-art{height:360px;border-radius:24px;background:radial-gradient(circle,#235fff33,transparent 35%),linear-gradient(145deg,#eef5ff,#fff);border:1px solid #dce6f5;display:grid;place-items:center;position:relative;overflow:hidden}
+.safe{width:170px;height:170px;border-radius:24px;background:linear-gradient(145deg,#12264a,#071224);box-shadow:0 25px 50px #132c5430;display:grid;place-items:center;font-size:65px;border:5px solid #7ca7ff}
+.safe-art:before,.safe-art:after{content:"";position:absolute;border:1px solid #a9c5ff55;border-radius:50%;width:310px;height:150px}.safe-art:after{transform:rotate(55deg)}
+.cta{padding:0 0 90px}.cta-box{background:linear-gradient(110deg,#0a1230,#111c4c);border-radius:22px;padding:35px 42px;color:white;display:flex;align-items:center;justify-content:space-between;gap:25px;box-shadow:0 25px 60px #0b1c4620}.cta h2{font-size:27px}.cta p{color:#aebbd0;margin-top:4px}
+footer{background:#050b16;color:#b0bdcf;padding:65px 0 25px}.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:50px;padding-bottom:45px}.footer-brand p{max-width:280px;margin-top:15px;font-size:14px}.footer h4{color:white;margin-bottom:16px}.footer a{display:block;font-size:14px;margin:10px 0;color:#aebbd0}.footer a:hover{color:white}.copyright{border-top:1px solid var(--line);padding-top:22px;text-align:center;font-size:12px}
+@media(max-width:850px){.navlinks{display:none}.hero{padding-top:120px}.hero-grid,.about-grid{grid-template-columns:1fr}.phone-wrap{order:-1}.features{grid-template-columns:1fr 1fr}.footer-grid{grid-template-columns:1fr 1fr}.hero-grid{gap:35px}h1{letter-spacing:-2px}}
+@media(max-width:560px){.container{width:min(var(--max),calc(100% - 28px))}.features{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr}.trust{flex-direction:column;gap:10px}.cta-box{padding:28px;flex-direction:column;align-items:flex-start}.phone{transform:scale(.88);margin:-30px 0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a class="brand" href="#"><span class="shield"></span>ArmourDoc</a>
+    <nav class="navlinks">
+      <a href="#features">Features</a><a href="#security">Security</a><a href="#about">About</a><a href="#support">Support</a>
+    </nav>
+    <a class="btn btn-primary" href="#download">Download App</a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow"><span></span> PRIVACY-FIRST DOCUMENT SECURITY</div>
+      <h1>Your Documents.<br>Your Keys.<br><span class="gradient">Your Privacy.</span></h1>
+      <p>ArmourDoc is a zero-knowledge document vault designed to keep your most sensitive files private, protected and under your full control.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#download">↧ &nbsp; Download on Google Play</a>
+        <a class="btn btn-outline" href="#features">Explore Features</a>
+      </div>
+      <div class="trust">
+        <div><span class="check">♙</span> Zero-Knowledge Architecture</div>
+        <div><span class="check">◇</span> Anti-Snooping Guard</div>
+        <div><span class="check">◉</span> Biometric Protection</div>
+      </div>
+    </div>
+    <div class="phone-wrap">
+      <div class="glow"></div>
+      <div class="phone">
+        <div class="app-title">ArmourDoc</div>
+        <div class="vault"><b>🔐 &nbsp; Main Vault</b><small>12 Documents</small></div>
+        <div class="tiles">
+          <div class="tile"><div class="icon">🎭</div><b>Decoy Vault</b><small>3 Documents</small></div>
+          <div class="tile"><div class="icon">📄</div><b>Secure Reader</b><small>PDF Viewer</small></div>
+          <div class="tile"><div class="icon">◉</div><b>Biometric Lock</b><small>Face / Fingerprint</small></div>
+          <div class="tile"><div class="icon">✈</div><b>Offline Access</b><small>Always available</small></div>
+        </div>
+        <div class="phone-note">Your data. Your control.<br>Zero-knowledge encrypted.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <div class="section-head"><h2>Powerful Features for Ultimate Protection</h2><p>Built around privacy, local control and practical security for the documents that matter most.</p></div>
+    <div class="features">
+      <article class="feature"><div class="feature-icon">🔐</div><h3>Zero-Knowledge Encryption</h3><p>Only you hold the keys. ArmourDoc is designed so your protected content stays inaccessible to anyone else.</p></article>
+      <article class="feature"><div class="feature-icon">🎭</div><h3>Decoy Vault</h3><p>A separate vault designed for duress situations, helping keep your real protected content hidden.</p></article>
+      <article class="feature"><div class="feature-icon">◉</div><h3>Live Biometric Lock</h3><p>Use supported device biometrics as an additional layer of protection for sensitive documents.</p></article>
+      <article class="feature"><div class="feature-icon">📄</div><h3>Secure PDF Reader</h3><p>Read PDFs securely with rendering designed to minimise unnecessary caching and traces.</p></article>
+      <article class="feature"><div class="feature-icon">✈</div><h3>Offline First</h3><p>Access your local vault without depending on an internet connection.</p></article>
+      <article class="feature" id="security"><div class="feature-icon">🛡</div><h3>Anti-Snooping Guard</h3><p>Security controls designed to help protect your screen, app access and sensitive information.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="container about-grid">
+    <div>
+      <h2>Security without compromise.</h2>
+      <p>ArmourDoc is built for people who value privacy and control. Store sensitive documents, IDs, records and PDFs in a protected vault designed around a zero-knowledge approach.</p>
+      <div class="bullets">
+        <div><span class="tick">●</span> Privacy-focused document storage</div>
+        <div><span class="tick">●</span> Hardware-backed biometric protection where supported</div>
+        <div><span class="tick">●</span> Offline access to locally stored documents</div>
+        <div><span class="tick">●</span> Your data stays under your control</div>
+      </div>
+    </div>
+    <div class="safe-art"><div class="safe">🔒</div></div>
+  </div>
+</section>
+
+
+<section class="about" id="privacy" style="background:#fff">
+  <div class="container">
+    <div class="section-head">
+      <h2>Privacy Policy</h2>
+      <p>Effective date: August 20, 2026</p>
+    </div>
+    <div style="max-width:850px;margin:auto;color:#59677c;font-size:15px">
+      <p style="margin-bottom:18px"><strong>ArmourDoc</strong> respects your privacy and is designed with security and privacy in mind. This general privacy policy explains how information may be handled when you use the ArmourDoc website or application.</p>
+      <p style="margin-bottom:18px"><strong>Information we may collect.</strong> Depending on how you use ArmourDoc, we may collect account information such as your name and email address, purchase or subscription information, technical information required to operate and secure the service, and information you voluntarily provide to support.</p>
+      <p style="margin-bottom:18px"><strong>Documents and files.</strong> ArmourDoc is designed around a zero-knowledge privacy model. Where documents are stored only locally on your device, ArmourDoc does not need to collect those files. If a cloud backup or storage feature is enabled, relevant files may be processed and stored as required to provide that feature.</p>
+      <p style="margin-bottom:18px"><strong>Payments.</strong> Payments and purchase information may be processed by third-party payment providers. ArmourDoc does not need to store your full payment card details.</p>
+      <p style="margin-bottom:18px"><strong>How information is used.</strong> Information may be used to provide and maintain ArmourDoc, manage accounts and subscriptions, provide customer support, improve security, prevent abuse, and comply with legal obligations.</p>
+      <p style="margin-bottom:18px"><strong>Security.</strong> We use reasonable technical and organisational measures intended to protect information. No internet-connected service can guarantee absolute security.</p>
+      <p style="margin-bottom:18px"><strong>Third parties.</strong> ArmourDoc may rely on service providers for hosting, analytics, payments, authentication, communications, and other operational functions. Such providers may process information only as necessary to provide their services.</p>
+      <p style="margin-bottom:18px"><strong>Your choices.</strong> You may contact us regarding access, correction, deletion, or questions about personal information, subject to applicable law and legitimate operational requirements.</p>
+      <p><strong>Privacy enquiries:</strong> <a href="mailto:support@newiracraft.com" style="color:#1769ff;font-weight:700">support@newiracraft.com</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="terms">
+  <div class="container">
+    <div class="section-head">
+      <h2>Terms of Service</h2>
+      <p>Effective date: August 20, 2026</p>
+    </div>
+    <div style="max-width:850px;margin:auto;color:#59677c;font-size:15px">
+      <p style="margin-bottom:18px">These general Terms of Service govern your use of the ArmourDoc website and application. By using ArmourDoc, you agree to these terms.</p>
+      <p style="margin-bottom:18px"><strong>Use of the service.</strong> You agree to use ArmourDoc lawfully and not to misuse, interfere with, reverse engineer, or attempt to gain unauthorised access to the service or another user's account.</p>
+      <p style="margin-bottom:18px"><strong>Your content and keys.</strong> You remain responsible for your documents, account credentials, encryption keys, and other content. Because ArmourDoc is designed around a zero-knowledge architecture, loss of credentials or keys may result in permanent loss of access to protected content.</p>
+      <p style="margin-bottom:18px"><strong>Subscriptions and payments.</strong> Paid features may be offered through third-party payment providers or app stores. Pricing, renewal, cancellation, and refund terms may be subject to the applicable provider's rules.</p>
+      <p style="margin-bottom:18px"><strong>Availability.</strong> We aim to keep ArmourDoc reliable and secure, but we do not guarantee uninterrupted or error-free availability. Features may change, be suspended, or be discontinued where reasonably necessary.</p>
+      <p style="margin-bottom:18px"><strong>Security disclaimer.</strong> ArmourDoc provides security features but cannot guarantee that every device, operating system, network, account, or stored file will remain completely secure. You should maintain appropriate device security and backups where appropriate.</p>
+      <p style="margin-bottom:18px"><strong>Limitation of liability.</strong> To the extent permitted by applicable law, ArmourDoc and its operators will not be responsible for indirect, incidental, special, or consequential losses arising from use of the service.</p>
+      <p style="margin-bottom:18px"><strong>Changes.</strong> These terms may be updated from time to time. Continued use of ArmourDoc after an update constitutes acceptance of the revised terms where permitted by law.</p>
+      <p><strong>Terms enquiries:</strong> <a href="mailto:support@newiracraft.com" style="color:#1769ff;font-weight:700">support@newiracraft.com</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="download">
+  <div class="container">
+    <div class="cta-box">
+      <div><h2>Secure your digital identity with ArmourDoc.</h2><p>Take control of your sensitive documents and privacy.</p></div>
+      <a class="btn btn-primary" href="#" onclick="alert('Google Play listing coming soon.');return false;">Get it on Google Play →</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer id="support">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="#"><span class="shield"></span>ArmourDoc</a>
+        <p>Zero-Knowledge Document Vault with Anti-Snooping Guard Controls.</p>
+      </div>
+      <div><h4>Quick Links</h4><a href="#">Home</a><a href="#features">Features</a><a href="#security">Security</a><a href="#about">About</a></div>
+      <div><h4>Legal</h4><a href="#privacy">Privacy Policy</a><a href="#terms">Terms of Service</a></div>
+      <div><h4>Support</h4><a href="mailto:support@newiracraft.com">Help & Support</a><a href="mailto:support@newiracraft.com">Contact Us</a></div>
+    </div>
+    <div class="copyright">© 2026 ArmourDoc. All rights reserved.</div>
+  </div>
+</footer>
+</body>
+</html>
