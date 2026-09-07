@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ArmourDoc — Zero-Knowledge Document Vault</title>
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/logo-sm.png">
 <meta name="description" content="ArmourDoc is a zero-knowledge document vault with anti-snooping guard controls, biometric protection, secure PDF rendering and offline access.">
 <style>
 :root{
@@ -19,8 +21,7 @@ a{text-decoration:none;color:inherit}
 header{position:fixed;top:0;left:0;right:0;z-index:20;background:rgba(5,11,22,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
 .nav{height:76px;display:flex;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:11px;color:white;font-size:23px;font-weight:800;letter-spacing:-.5px}
-.shield{width:38px;height:44px;display:grid;place-items:center;clip-path:polygon(50% 0,92% 16%,86% 67%,50% 100%,14% 67%,8% 16%);background:linear-gradient(145deg,#6954ff,#1769ff);box-shadow:0 0 30px #1769ff66}
-.shield:after{content:"🔒";font-size:15px;filter:grayscale(1) brightness(8)}
+.brand img{width:42px;height:42px;border-radius:10px;box-shadow:0 0 30px #1769ff44}
 .navlinks{display:flex;gap:32px;color:#c7d0e2;font-size:14px}
 .navlinks a:hover{color:white}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:9px;font-weight:700;font-size:14px;border:1px solid transparent;transition:.2s}
@@ -75,7 +76,7 @@ footer{background:#050b16;color:#b0bdcf;padding:65px 0 25px}.footer-grid{display
 <body>
 <header>
   <div class="container nav">
-    <a class="brand" href="#"><span class="shield"></span>ArmourDoc</a>
+    <a class="brand" href="#"><img src="images/logo-sm.png" alt="ArmourDoc logo">ArmourDoc</a>
     <nav class="navlinks">
       <a href="#features">Features</a><a href="#security">Security</a><a href="#about">About</a><a href="#support">Support</a>
     </nav>
@@ -202,7 +203,7 @@ footer{background:#050b16;color:#b0bdcf;padding:65px 0 25px}.footer-grid{display
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a class="brand" href="#"><span class="shield"></span>ArmourDoc</a>
+        <a class="brand" href="#"><img src="images/logo-sm.png" alt="ArmourDoc logo">ArmourDoc</a>
         <p>Zero-Knowledge Document Vault with Anti-Snooping Guard Controls.</p>
       </div>
       <div><h4>Quick Links</h4><a href="#">Home</a><a href="#features">Features</a><a href="#security">Security</a><a href="#about">About</a></div>
